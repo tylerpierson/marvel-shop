@@ -1,5 +1,7 @@
 import { Component } from 'react'
 
+import { signUp } from '../../utilities/users-service'
+
 export default class SignUpForm extends Component {
     
     state={
@@ -17,9 +19,20 @@ export default class SignUpForm extends Component {
         })
     }
 
-    handleSubmit = (e) => {
+    handleSubmit = async (e) => {
         e.preventDefault()
-        alert(JSON.stringify(this.state))
+
+        try {
+            const formData = {...this.state}
+            delete formData.error
+            delete formData.confirm
+
+            const user = await signUp(formData)
+
+            console.log(user)
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     render() {
@@ -34,7 +47,7 @@ export default class SignUpForm extends Component {
                         <input type="email" name="email" value={this.state.email} onChange={this.handleChange} required />
                         <label>Password</label>
                         <input type="password" name="password" value={this.state.password} onChange={this.handleChange} required />
-                        <label>Name</label>
+                        <label>Confirm Password</label>
                         <input type="password" name="confirm" value={this.state.confirm} onChange={this.handleChange} required />
                         <button type="submit" disabled={disable}>SIGN UP</button>
                     </form>

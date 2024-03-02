@@ -11,18 +11,20 @@ require('dotenv').config()
 // Connect to the database
 require('./config/database')
 
+app.use(logger('dev'))
 app.use(express.json())
 app.use((req, res, next) => {
     res.locals.data = {}
     next()
 })
-app.use(logger('dev'))
+app.use('/api/users', require('./routes/api/users'))
 
 // Configure both serve-favicon & statuc middleware
 // to serve from the production 'build' folder
 app.use(favicon(path.join(__dirname, 'build', 'favicon.ico')))
 
 app.use(express.static('public'))
+
 
 // for react router
 app.get('*', (req, res) => {
